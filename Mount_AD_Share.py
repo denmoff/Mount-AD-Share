@@ -22,7 +22,10 @@ comp_name = Popen(['/usr/sbin/scutil', '--get', 'ComputerName']\
 
 as_mount_cmd = 'mount volume "smb://acquisitions.rutgers.edu/%s"' % user_name
 mount_share_cmd = ['/usr/bin/osascript', '-e', as_mount_cmd]
-
+###Mount the users share directories as well.
+as_mount_cmd_shares = 'mount volume "smb://acquisitions.rutgers.edu/users"'
+mount_share_cmd_shares = ['/usr/bin/osascript', '-e', as_mount_cmd_shares]
+###
 
 def main():
     if os.path.isdir(backup_dir):
@@ -65,6 +68,7 @@ def mount_ad_share():
             ,stdin=DEVNULL,stdout=DEVNULL,stderr=DEVNULL,shell=False) == 0: #If the command finds the computer, it will return 0.
             print "Connection to AD share is good. Attempting to mount..."
             call(mount_share_cmd,shell=False)
+            call(mount_share_cmd_shares,shell=False)
         else:
             print "Could not connect to AD. Exiting."
             sys.exit()
