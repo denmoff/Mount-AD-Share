@@ -16,6 +16,7 @@ import subprocess, os, sys, getpass, socket, time, commands
 from subprocess import Popen, PIPE, call
 
 user_name = getpass.getuser()
+ru_ips = ['172.24','165.230']
 backup_dir = os.path.join('/Volumes/',user_name)
 comp_name = Popen(['/usr/sbin/scutil', '--get', 'ComputerName']\
     ,stdout=PIPE,shell=False).communicate()[0].split('\n')[0]
@@ -62,7 +63,7 @@ def main():
 def mount_ad_share():
     DEVNULL = open(os.devnull, 'r+b', 0)
     comp_subnet = get_ip()
-    if comp_subnet[0] == '172' and comp_subnet[1] == '24':
+    if comp_subnet in ru_ips:
         print "This is a Rutgers subnet."
         if call(['/usr/bin/dscl', '/Search', 'read', '/Computers/%s$' % user_name]\
             ,stdin=DEVNULL,stdout=DEVNULL,stderr=DEVNULL,shell=False) == 0: #If the command finds the computer, it will return 0.
@@ -83,7 +84,7 @@ def get_ip():
     s.connect(('8.8.8.8', 80))
     cs = s.getsockname()[0]
     s.close()
-    cs = cs.split(".")[0:2]
+    cs = cs.rsplit('.',2)[0]
     return cs
 
 if __name__ == "__main__":
