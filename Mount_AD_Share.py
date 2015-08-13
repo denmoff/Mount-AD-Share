@@ -65,7 +65,7 @@ def mount_ad_share():
     comp_subnet = get_ip()
     if comp_subnet in ru_ips:
         print "This is a Rutgers subnet."
-        if call(['/usr/bin/dscl', '/Search', 'read', '/Computers/%s$' % user_name]\
+        if call(['/usr/bin/dscl', '/Search', 'read', '/Computers/%s$' % comp_name]\
             ,stdin=DEVNULL,stdout=DEVNULL,stderr=DEVNULL,shell=False) == 0: #If the command finds the computer, it will return 0.
             print "Connection to AD share is good. Attempting to mount..."
             call(mount_share_cmd,shell=False)
