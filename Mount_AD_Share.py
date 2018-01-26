@@ -16,15 +16,15 @@ import subprocess, os, sys, getpass, socket, time, commands
 from subprocess import Popen, PIPE, call
 
 user_name = getpass.getuser()
-ru_ips = ['172.24','165.230']
+ru_ips = [] # put list of subnets in here: eg. ['123.45','234.34']
 backup_dir = os.path.join('/Volumes/',user_name)
 comp_name = Popen(['/usr/sbin/scutil', '--get', 'ComputerName']\
     ,stdout=PIPE,shell=False).communicate()[0].split('\n')[0]
-
-as_mount_cmd = 'mount volume "smb://acquisitions.rutgers.edu/%s"' % user_name
+server_name = '' # put fqdn in here
+as_mount_cmd = 'mount volume "smb://%s/%s"' % (server_name,user_name)
 mount_share_cmd = ['/usr/bin/osascript', '-e', as_mount_cmd]
 ###Mount the users share directories as well.
-as_mount_cmd_shares = 'mount volume "smb://acquisitions.rutgers.edu/users"'
+as_mount_cmd_shares = 'mount volume "smb://%s/users"' % server_name
 mount_share_cmd_shares = ['/usr/bin/osascript', '-e', as_mount_cmd_shares]
 ###
 
